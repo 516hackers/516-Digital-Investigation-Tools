@@ -9,7 +9,7 @@ import requests
 import socket
 import argparse
 from datetime import datetime
-from typing import Dict, Any  # ← ADDED MISSING IMPORT
+from typing import Dict, Any
 from utils.logger import logger
 from utils.export_utils import ExportUtils516
 
@@ -25,7 +25,13 @@ class DomainResearch516:
             # Convert to serializable format
             result = {}
             for key, value in whois_data.items():
-                if hasattr(value, '__dict__'):
+                if isinstance(value, (datetime, list)):
+                    # Convert datetime to string, handle lists
+                    if isinstance(value, list):
+                        result[key] = [str(v) if hasattr(v, '__dict__') else v for v in value]
+                    else:
+                        result[key] = value.isoformat() if hasattr(value, 'isoformat') else str(value)
+                elif hasattr(value, '__dict__'):
                     result[key] = str(value)
                 else:
                     result[key] = value
