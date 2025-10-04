@@ -1,0 +1,52 @@
+{
+    "platforms": {
+        "github": {
+            "name": "GitHub",
+            "url": "https://github.com/{}",
+            "check_type": "http_status",
+            "category": "coding"
+        },
+        "twitter": {
+            "name": "Twitter",
+            "url": "https://twitter.com/{}",
+            "check_type": "http_status",
+            "category": "social"
+        },
+        "instagram": {
+            "name": "Instagram",
+            "url": "https://instagram.com/{}",
+            "check_type": "http_status",
+            "category": "social"
+        },
+        "linkedin": {
+            "name": "LinkedIn",
+            "url": "https://linkedin.com/in/{}",
+            "check_type": "http_status",
+            "category": "professional"
+        },
+        "reddit": {
+            "name": "Reddit",
+            "url": "https://reddit.com/user/{}",
+            "check_type": "http_status",
+            "category": "social"
+        },
+        "youtube": {
+            "name": "YouTube",
+            "url": "https://youtube.com/@{}",
+            "check_type": "http_status",
+            "category": "video"
+        },
+        "facebook": {
+            "name": "Facebook",
+            "url": "https://facebook.com/{}",
+            "check_type": "http_status",
+            "category": "social"
+        },
+        "tiktok": {
+            "name": "TikTok",
+            "url": "https://tiktok.com/@{}",
+            "check_type": "http_status",
+            "category": "video"
+        }
+    }
+}
