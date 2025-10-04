@@ -1,11 +1,11 @@
 """
-516 Hackers OSINT Toolkit
-Scripts package for all OSINT and media analysis tools
+516 Digital Investigation Tools
+Scripts package for all digital investigation and OSINT tools
 """
 
 __version__ = "1.0.0"
 __author__ = "516 Hackers"
-__description__ = "Comprehensive OSINT and media analysis toolkit"
+__description__ = "Comprehensive digital investigation and OSINT toolkit"
 
 # Import main classes for easy access
 from .sherlock_wrapper import Sherlock516
@@ -30,4 +30,4 @@ __all__ = [
 ]
 
 # Package initialization
-print(f"🔍 516 Hackers OSINT Toolkit v{__version__} loaded")
+print(f"🔍 516 Digital Investigation Tools v{__version__} loaded")
