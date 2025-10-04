@@ -1,6 +1,6 @@
 """
-516 Hackers - Utility Functions
-Common helper functions for the OSINT toolkit
+516 Digital Investigation Tools - Utility Functions
+Common helper functions for the digital investigation toolkit
 """
 
 import json
@@ -40,14 +40,19 @@ def validate_email(email):
     return re.match(pattern, email) is not None
 
 def print_banner():
-    """Print 516 Hackers banner"""
+    """Print 516 Digital Investigation Tools banner"""
     banner = """
-╔══════════════════════════════════════════════╗
-║                516 HACKERS                   ║
-║           OSINT Toolkit v1.0                ║
-║                                              ║
-║    Social Media Intelligence | Forensics    ║
-║        Metadata Analysis | Image OSINT      ║
-╚══════════════════════════════════════════════╝
+╔══════════════════════════════════════════════════════╗
+║                                                      ║
+║             516 DIGITAL INVESTIGATION TOOLS          ║
+║                   Version 1.0.0                      ║
+║                                                      ║
+║    Social Media Intelligence | Digital Forensics     ║
+║        Metadata Analysis | OSINT Investigations      ║
+║                                                      ║
+║    https://github.com/516hackers/                    ║
+║        516-Digital-Investigation-Tools               ║
+║                                                      ║
+╚══════════════════════════════════════════════════════╝
     """
     print(banner)
