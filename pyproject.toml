@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "516-osint-toolkit"
+version = "1.0.0"
+description = "A comprehensive OSINT and media analysis toolkit by 516 Hackers"
+authors = [
+    {name = "516 Hackers", email = "your-email@example.com"}
+]
+readme = "README.md"
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "Pillow>=9.0.0",
+    "requests>=2.28.0", 
+    "instaloader>=4.9.0",
+    "imagehash>=4.2.1",
+    "pandas>=1.5.0",
+    "python-whois>=0.8.0",
+    "dnspython>=2.2.0"
+]
+
+[project.scripts]
+sherlock516 = "scripts.sherlock_wrapper:main"
+ig516 = "scripts.enhanced_instaloader:main"
+meta516 = "scripts.metadata_analyzer:main"
+img516 = "scripts.image_forensics:main"
+social516 = "scripts.social_media_mapper:main"
+email516 = "scripts.email_analyzer:main"
+domain516 = "scripts.domain_research:main"
+report516 = "scripts.report_generator:main"
