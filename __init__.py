@@ -1,15 +1,15 @@
 """
-516 Hackers OSINT Toolkit
-A comprehensive OSINT and media analysis toolkit for digital investigations
+516 Digital Investigation Tools
+A comprehensive digital investigation and OSINT toolkit for cybersecurity professionals
 """
 
 __version__ = "1.0.0"
 __author__ = "516 Hackers"
-__description__ = "Comprehensive OSINT and media analysis toolkit for digital investigations, social media intelligence, and forensic analysis"
+__description__ = "Comprehensive digital investigation and OSINT toolkit for cybersecurity professionals, researchers, and ethical hackers"
 
 # Package metadata
-PACKAGE_NAME = "516-OSINT-Toolkit"
-REPOSITORY_URL = "https://github.com/516-hackers/516-OSINT-Toolkit"
+PACKAGE_NAME = "516-Digital-Investigation-Tools"
+REPOSITORY_URL = "https://github.com/516hackers/516-Digital-Investigation-Tools"
 
 # Import main components for easy access
 try:
@@ -47,10 +47,10 @@ def get_version():
 def get_tools():
     """Return list of available tools"""
     return {
-        'sherlock516': 'Username search across social media',
+        'investigate516': 'Username investigation across social media',
         'ig516': 'Instagram profile analysis',
         'meta516': 'Image metadata analysis and cleaning',
-        'img516': 'Image forensics and similarity detection',
+        'image516': 'Image forensics and similarity detection',
         'social516': 'Social media presence mapping',
         'email516': 'Email validation and analysis',
         'domain516': 'Domain research and WHOIS lookup',
