@@ -1,7 +1,4 @@
-#!/bin/bash
 
-# 516 Digital Investigation Tools - Hacker Interface
-# Stylish menu-driven interface for all investigation tools
 
 # Colors for styling
 RED='\033[0;31m'
@@ -13,10 +10,11 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
+
 # ASCII Art Banner
 show_banner() {
     clear
-    echo -e "${CYAN}"
+    echo -e "${RED}"
     echo '╔══════════════════════════════════════════════════════════════╗'
     echo '║                                                              ║'
     echo '║                  ██████╗   ██╗  ██████╗                      ║'
@@ -35,29 +33,161 @@ show_banner() {
     echo
 }
 
-
-# Animation function
-typewriter() {
+# Simple loading function
+show_loading() {
     local text="$1"
-    for ((i=0; i<${#text}; i++)); do
-        echo -n "${text:$i:1}"
-        sleep 0.03
-    done
-    echo
+    echo -ne "${CYAN}[*] $text${NC}"
+    sleep 2
+    echo -e "${GREEN} ✓ DONE${NC}"
 }
 
-# Loading animation
-show_loading() {
-    local pid=$1
-    local text="$2"
-    echo -ne "${CYAN}[*] $text${NC}"
-    while kill -0 $pid 2>/dev/null; do
-        for X in '-' '/' '|' '\'; do
-            echo -ne "${CYAN}\b$X${NC}"
-            sleep 0.1
-        done
-    done
-    echo -e "${GREEN} ✓ DONE${NC}"
+# Display results in terminal
+display_instagram_results() {
+    local username="$1"
+    local output_file="outputs/instagram_${username}.json"
+    
+    if [[ -f "$output_file" ]]; then
+        echo -e "\n${GREEN}📊 INSTAGRAM ANALYSIS RESULTS:${NC}"
+        echo -e "${CYAN}================================${NC}"
+        
+        # Use python to parse and display JSON nicely
+        python3 - <<EOF
+import json
+import os
+
+try:
+    with open('$output_file', 'r') as f:
+        data = json.load(f)
+    
+    profile = data.get('profile', {})
+    analysis = data.get('analysis', {})
+    
+    if profile:
+        print("👤 Profile Information:")
+        print(f"   Username: {profile.get('username', 'N/A')}")
+        print(f"   Full Name: {profile.get('full_name', 'N/A')}")
+        print(f"   Followers: {profile.get('followers', 'N/A'):,}")
+        print(f"   Following: {profile.get('followees', 'N/A'):,}")
+        print(f"   Posts: {profile.get('posts_count', 'N/A'):,}")
+        print(f"   Private: {'Yes' if profile.get('is_private') else 'No'}")
+        print(f"   Verified: {'Yes' if profile.get('is_verified') else 'No'}")
+        print(f"   Biography: {profile.get('biography', 'N/A')[:100]}...")
+        print(f"   External URL: {profile.get('external_url', 'N/A')}")
+    
+    if analysis:
+        print("\n📈 Engagement Analysis:")
+        print(f"   Follower/Following Ratio: {analysis.get('follower_to_following_ratio', 'N/A')}")
+        print(f"   Posts per Follower: {analysis.get('posts_per_follower', 'N/A')}")
+        print(f"   Profile Completeness: {analysis.get('profile_completeness_score', 'N/A')}%")
+        
+except Exception as e:
+    print(f"Error reading results: {e}")
+EOF
+    else
+        echo -e "${RED}❌ Results file not found: $output_file${NC}"
+    fi
+}
+
+display_social_results() {
+    local username="$1"
+    local output_file=$(find outputs -name "social_map_${username}_*.json" | head -1)
+    
+    if [[ -f "$output_file" ]]; then
+        echo -e "\n${GREEN}🌐 SOCIAL MEDIA PRESENCE RESULTS:${NC}"
+        echo -e "${CYAN}==================================${NC}"
+        
+        python3 - <<EOF
+import json
+import glob
+
+try:
+    with open('$output_file', 'r') as f:
+        data = json.load(f)
+    
+    results = data.get('results', {})
+    platforms = results.get('platforms', {})
+    summary = results.get('summary', {})
+    
+    if summary:
+        print(f"📊 Summary for: {results.get('username', 'N/A')}")
+        print(f"   Platforms Checked: {summary.get('total_platforms_checked', 'N/A')}")
+        print(f"   Platforms Found: {summary.get('platforms_found', 'N/A')}")
+        print(f"   Discovery Rate: {summary.get('discovery_rate', 'N/A')}%")
+    
+    print("\n🔍 Platform Details:")
+    found_count = 0
+    for platform, data in platforms.items():
+        status = "✅ FOUND" if data.get('exists') else "❌ NOT FOUND"
+        if data.get('exists'):
+            found_count += 1
+            print(f"   {platform.upper()}: {status} - {data.get('url')}")
+        else:
+            print(f"   {platform.upper()}: {status}")
+    
+    print(f"\n🎯 Found on {found_count} platforms")
+    
+except Exception as e:
+    print(f"Error reading results: {e}")
+EOF
+    else
+        echo -e "${RED}❌ Results file not found for username: $username${NC}"
+    fi
+}
+
+display_domain_results() {
+    local domain="$1"
+    local output_file=$(find outputs -name "domain_research_${domain}_*.json" | head -1)
+    
+    if [[ -f "$output_file" ]]; then
+        echo -e "\n${GREEN}🌐 DOMAIN RESEARCH RESULTS:${NC}"
+        echo -e "${CYAN}=============================${NC}"
+        
+        python3 - <<EOF
+import json
+
+try:
+    with open('$output_file', 'r') as f:
+        data = json.load(f)
+    
+    results = data.get('results', {})
+    
+    print(f"🔍 Domain: {results.get('domain', 'N/A')}")
+    
+    # WHOIS Info
+    whois_info = results.get('whois_info', {})
+    if whois_info and 'error' not in whois_info:
+        print("\n📋 WHOIS Information:")
+        print(f"   Registrar: {whois_info.get('registrar', 'N/A')}")
+        print(f"   Creation Date: {whois_info.get('creation_date', 'N/A')}")
+        print(f"   Expiration Date: {whois_info.get('expiration_date', 'N/A')}")
+    
+    # DNS Info
+    dns_info = results.get('dns_info', {})
+    if dns_info:
+        print("\n🔗 DNS Records:")
+        for record_type, records in dns_info.items():
+            if records and 'Error' not in str(records):
+                print(f"   {record_type}: {len(records)} records found")
+    
+    # IP Info
+    ip_info = results.get('ip_info', {})
+    if ip_info and 'error' not in ip_info:
+        print(f"\n🌍 IP Information:")
+        print(f"   IP Address: {ip_info.get('ip_address', 'N/A')}")
+    
+    # HTTP Headers
+    http_info = results.get('http_headers', {})
+    if http_info and 'error' not in http_info:
+        print(f"\n📡 HTTP Headers:")
+        print(f"   Status Code: {http_info.get('status_code', 'N/A')}")
+        print(f"   Server: {http_info.get('server', 'N/A')}")
+    
+except Exception as e:
+    print(f"Error reading results: {e}")
+EOF
+    else
+        echo -e "${RED}❌ Results file not found for domain: $domain${NC}"
+    fi
 }
 
 # Tool functions
@@ -67,11 +197,11 @@ run_username_investigation() {
     read -p "Enter username to investigate: " username
     echo -e "${YELLOW}[*] Starting investigation for: $username${NC}"
     
-    (investigate516 "$username" > /dev/null 2>&1) &
-    show_loading $! "Scanning 50+ social media platforms"
+    show_loading "Scanning 50+ social media platforms"
+    investigate516 "$username"
     
     echo -e "${GREEN}[+] Investigation completed!${NC}"
-    echo -e "${BLUE}[i] Results saved to: outputs/${username}_profiles.json${NC}"
+    display_social_results "$username"
 }
 
 run_instagram_analysis() {
@@ -80,11 +210,11 @@ run_instagram_analysis() {
     read -p "Enter Instagram username: " username
     echo -e "${YELLOW}[*] Analyzing Instagram profile: $username${NC}"
     
-    (ig516 "$username" > /dev/null 2>&1) &
-    show_loading $! "Extracting profile data and engagement metrics"
+    show_loading "Extracting profile data and engagement metrics"
+    ig516 "$username"
     
     echo -e "${GREEN}[+] Instagram analysis completed!${NC}"
-    echo -e "${BLUE}[i] Results saved to: outputs/instagram_${username}.json${NC}"
+    display_instagram_results "$username"
 }
 
 run_metadata_analysis() {
@@ -98,11 +228,35 @@ run_metadata_analysis() {
         return
     fi
     
-    (meta516 "$image_path" > /dev/null 2>&1) &
-    show_loading $! "Extracting EXIF and metadata"
+    show_loading "Extracting EXIF and metadata"
+    meta516 "$image_path"
     
     echo -e "${GREEN}[+] Metadata analysis completed!${NC}"
-    echo -e "${BLUE}[i] Results saved to: outputs/metadata_analysis_*.json${NC}"
+    
+    # Show metadata results
+    local output_file=$(find outputs -name "metadata_analysis_*.json" | head -1)
+    if [[ -f "$output_file" ]]; then
+        echo -e "\n${GREEN}📸 METADATA ANALYSIS RESULTS:${NC}"
+        echo -e "${CYAN}==============================${NC}"
+        python3 -c "
+import json
+file = '$output_file'
+with open(file, 'r') as f:
+    data = json.load(f)
+analysis = data.get('analysis', {})
+print(f'📁 File: {analysis.get(\"filename\", \"N/A\")}')
+print(f'📊 Size: {analysis.get(\"file_size\", \"N/A\")} bytes')
+print(f'🔢 Hash: {analysis.get(\"file_hash\", \"N/A\")}')
+print(f'🖼️ Format: {analysis.get(\"image_format\", \"N/A\")}')
+print(f'📏 Dimensions: {analysis.get(\"image_size\", \"N/A\")}')
+metadata = analysis.get('metadata', {})
+print(f'📋 Metadata Tags: {len(metadata)}')
+if metadata:
+    print('\n🔍 Key Metadata:')
+    for key in list(metadata.keys())[:5]:
+        print(f'   {key}: {metadata[key][:50]}...')
+"
+    fi
 }
 
 run_image_forensics() {
@@ -118,18 +272,18 @@ run_image_forensics() {
         1)
             read -p "Enter first image path: " img1
             read -p "Enter second image path: " img2
-            (image516 compare "$img1" "$img2" > /dev/null 2>&1) &
-            show_loading $! "Comparing images using perceptual hashing"
+            show_loading "Comparing images using perceptual hashing"
+            image516 compare "$img1" "$img2"
             ;;
         2)
             read -p "Enter directory path: " dir_path
-            (image516 find-similar "$dir_path" > /dev/null 2>&1) &
-            show_loading $! "Finding similar images in directory"
+            show_loading "Finding similar images in directory"
+            image516 find-similar "$dir_path"
             ;;
         3)
             read -p "Enter image path: " img_path
-            (image516 hash "$img_path" > /dev/null 2>&1) &
-            show_loading $! "Calculating image hashes"
+            show_loading "Calculating image hashes"
+            image516 hash "$img_path"
             ;;
         *)
             echo -e "${RED}[!] Invalid choice${NC}"
@@ -146,11 +300,11 @@ run_social_mapping() {
     read -p "Enter username to map: " username
     echo -e "${YELLOW}[*] Mapping social media presence for: $username${NC}"
     
-    (social516 "$username" > /dev/null 2>&1) &
-    show_loading $! "Checking 8 major social platforms"
+    show_loading "Checking 8 major social platforms"
+    social516 "$username"
     
     echo -e "${GREEN}[+] Social media mapping completed!${NC}"
-    echo -e "${BLUE}[i] Results saved to: outputs/social_map_${username}_*.json${NC}"
+    display_social_results "$username"
 }
 
 run_email_analysis() {
@@ -164,13 +318,13 @@ run_email_analysis() {
     case $choice in
         1)
             read -p "Enter email address: " email
-            (email516 "$email" > /dev/null 2>&1) &
-            show_loading $! "Validating email and analyzing patterns"
+            show_loading "Validating email and analyzing patterns"
+            email516 "$email"
             ;;
         2)
             read -p "Enter file path with emails: " file_path
-            (email516 -f "$file_path" > /dev/null 2>&1) &
-            show_loading $! "Processing bulk email analysis"
+            show_loading "Processing bulk email analysis"
+            email516 -f "$file_path"
             ;;
         *)
             echo -e "${RED}[!] Invalid choice${NC}"
@@ -187,11 +341,11 @@ run_domain_research() {
     read -p "Enter domain to research: " domain
     echo -e "${YELLOW}[*] Researching domain: $domain${NC}"
     
-    (domain516 "$domain" > /dev/null 2>&1) &
-    show_loading $! "Gathering WHOIS, DNS, and HTTP data"
+    show_loading "Gathering WHOIS, DNS, and HTTP data"
+    domain516 "$domain"
     
     echo -e "${GREEN}[+] Domain research completed!${NC}"
-    echo -e "${BLUE}[i] Results saved to: outputs/domain_research_${domain}_*.json${NC}"
+    display_domain_results "$domain"
 }
 
 run_report_generator() {
@@ -199,8 +353,8 @@ run_report_generator() {
     echo -e "${CYAN}=================================${NC}"
     echo -e "${YELLOW}[*] Generating comprehensive report from all scans${NC}"
     
-    (report516 > /dev/null 2>&1) &
-    show_loading $! "Compiling data and generating reports"
+    show_loading "Compiling data and generating reports"
+    report516
     
     echo -e "${GREEN}[+] Unified report generated!${NC}"
     echo -e "${BLUE}[i] Reports saved in multiple formats (JSON, CSV, HTML, Excel)${NC}"
@@ -215,8 +369,8 @@ run_advanced_scan() {
     
     echo -e "${YELLOW}[*] Starting comprehensive scan for: $target${NC}"
     
-    (python examples/advanced_scan.py "$target" ${email:+-e "$email"} ${domain:+-d "$domain"} > /dev/null 2>&1) &
-    show_loading $! "Running multi-tool comprehensive investigation"
+    show_loading "Running multi-tool comprehensive investigation"
+    python examples/advanced_scan.py "$target" ${email:+-e "$email"} ${domain:+-d "$domain"}
     
     echo -e "${GREEN}[+] Advanced scan completed!${NC}"
     echo -e "${BLUE}[i] Complete report generated with all findings${NC}"
