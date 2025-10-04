@@ -1,8 +1,8 @@
 {
-    "516_hackers_toolkit": {
+    "516_digital_investigation_tools": {
         "version": "1.0.0",
         "author": "516 Hackers",
-        "description": "Comprehensive OSINT and Media Analysis Toolkit"
+        "description": "Comprehensive Digital Investigation and OSINT Toolkit"
     },
     "settings": {
         "output_directory": "outputs",
