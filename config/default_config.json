@@ -1,0 +1,31 @@
+{
+    "516_hackers_toolkit": {
+        "version": "1.0.0",
+        "author": "516 Hackers",
+        "description": "Comprehensive OSINT and Media Analysis Toolkit"
+    },
+    "settings": {
+        "output_directory": "outputs",
+        "log_level": "INFO",
+        "max_workers": 5,
+        "request_timeout": 10,
+        "user_agent_rotation": true
+    },
+    "social_media": {
+        "enable_instagram": true,
+        "enable_twitter": true,
+        "enable_facebook": false,
+        "enable_linkedin": true,
+        "enable_github": true
+    },
+    "analysis": {
+        "image_similarity_threshold": 10,
+        "metadata_clean_backup": true,
+        "hash_comparison_enabled": true
+    },
+    "api_keys": {
+        "virustotal": "YOUR_API_KEY_HERE",
+        "shodan": "YOUR_API_KEY_HERE",
+        "hunterio": "YOUR_API_KEY_HERE"
+    }
+}
