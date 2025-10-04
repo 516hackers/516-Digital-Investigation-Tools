@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+
 """
-516 Hackers - Enhanced Sherlock Wrapper
+516 Digital Investigation Tools - Enhanced Sherlock Wrapper
 Extended version of Sherlock with additional features
 """
 
@@ -67,8 +67,8 @@ class Sherlock516:
     def generate_report(self):
         """Generate a summary report"""
         report = f"""
-516 Hackers - OSINT Report
-==========================
+516 Digital Investigation Tools - Username Investigation Report
+=================================================================
 Username: {self.username}
 Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 Found Profiles: {len(self.found_profiles)}
@@ -81,14 +81,14 @@ Found on: {', '.join(self.found_profiles) if self.found_profiles else 'None'}
         return report
 
 def main():
-    parser = argparse.ArgumentParser(description='516 Hackers - Enhanced Sherlock')
+    parser = argparse.ArgumentParser(description='516 Digital Investigation Tools - Username Investigation')
     parser.add_argument('username', help='Username to search for')
     parser.add_argument('-o', '--output', default='outputs', help='Output directory')
     
     args = parser.parse_args()
     
     investigator = Sherlock516(args.username, args.output)
-    print(f"🔍 516 Hackers - Searching for username: {args.username}")
+    print(f"🔍 516 Digital Investigation Tools - Searching for username: {args.username}")
     
     investigator.check_standard_sites()
     output_file = investigator.save_results()
