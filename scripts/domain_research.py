@@ -1,6 +1,6 @@
 
 """
-516 Hackers - Domain Research Tool
+516 Digital Investigation Tools - Domain Research Tool
 Domain information and reputation analysis
 """
 
@@ -9,6 +9,7 @@ import requests
 import socket
 import argparse
 from datetime import datetime
+from typing import Dict, Any  # ← ADDED MISSING IMPORT
 from utils.logger import logger
 from utils.export_utils import ExportUtils516
 
@@ -108,7 +109,7 @@ class DomainResearch516:
     
     def comprehensive_analysis(self, domain: str) -> Dict[str, Any]:
         """Perform comprehensive domain analysis"""
-        print(f"🔍 Analyzing domain: {domain}")
+        print(f"🔍 516 Digital Investigation Tools - Analyzing domain: {domain}")
         
         results = {
             'domain': domain,
@@ -117,13 +118,13 @@ class DomainResearch516:
             'dns_info': self.get_dns_info(domain),
             'http_headers': self.check_http_headers(domain),
             'ip_info': self.get_ip_info(domain),
-            'tool': '516 Hackers Domain Research'
+            'tool': '516 Digital Investigation Tools - Domain Research'
         }
         
         return results
 
 def main():
-    parser = argparse.ArgumentParser(description='516 Hackers - Domain Research')
+    parser = argparse.ArgumentParser(description='516 Digital Investigation Tools - Domain Research')
     parser.add_argument('domain', help='Domain to research')
     parser.add_argument('-o', '--output', default='outputs', help='Output directory')
     
@@ -131,8 +132,8 @@ def main():
     
     researcher = DomainResearch516()
     
-    print(f"🌐 516 Hackers - Domain Research: {args.domain}")
-    print("=" * 50)
+    print(f"🌐 516 Digital Investigation Tools - Domain Research: {args.domain}")
+    print("=" * 60)
     
     results = researcher.comprehensive_analysis(args.domain)
     
